@@ -41,7 +41,7 @@ class ProductManager {
             contentParse.push(newProd)
             const finalContent = JSON.stringify(contentParse, null, 2)
             fs.promises.writeFile('productManager.json', finalContent)
-            
+
             res = "Producto agregado correctamente."
 
         }
