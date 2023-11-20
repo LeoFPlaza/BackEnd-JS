@@ -1,4 +1,4 @@
-const fs = require('fs')
+import fs from 'fs'
 
 class ProductManager {
     static contentParse = []
@@ -9,22 +9,37 @@ class ProductManager {
 
     static async getData() {
         let res
-        if (fs.existsSync('productManager.json')) {
-            this.contentParse = await fs.promises.readFile('productManager.json', 'utf-8')
+        if (fs.existsSync('./src/files/productManager.json')) {
+            this.contentParse = await fs.promises.readFile('./src/files/productManager.json', 'utf-8')
             res = "Archivo cargado exitosamente."
             console.log(res)
         } else {
-            await fs.promises.writeFile('productManager.json', "[]")
-            this.contentParse = await fs.promises.readFile('productManager.json', 'utf-8')
+            await fs.promises.writeFile('./src/files/productManager.json', "[]")
+            this.contentParse = await fs.promises.readFile('./src/files/productManager.json', 'utf-8')
             res = "Archivo creado exitosamente."
             console.log(res)
         }
         return res
     }
-    async getProducts() {
-        const content = await fs.promises.readFile('productManager.json', 'utf-8')
+
+    async getProducts(start, limit) {
+        const content = await fs.promises.readFile('./src/files/productManager.json', 'utf-8')
         const contentParse = await JSON.parse(content)
-        return contentParse;
+        start = parseInt(start) < 0 ? 0 : parseInt(start)
+        limit = parseInt(limit) < 0 ? 0 : parseInt(limit)
+        if (limit == 0 || start > limit || start > contentParse.length) {
+            console.log("GET/ getProducts full array")
+            console.log(contentParse)
+            return contentParse;
+        }
+        if (limit > contentParse.length) {
+            console.log("GET/ getProducts, with only start:", start)
+            console.log(contentParse.slice(start))
+            return contentParse.slice(start);
+        }
+        console.log("GET/ getProducts limited, start:", start, "limit:", limit + 1)
+        console.log(contentParse.slice(start, limit + 1))
+        return contentParse.slice(start, limit + 1);
     }
 
     async addProduct(title, description, code, price, thumbnail, stock) {
@@ -50,7 +65,7 @@ class ProductManager {
     }
 
     async getProductById(id) {
-        const content = await fs.promises.readFile('productManager.json', 'utf-8')
+        const content = await fs.promises.readFile('./src/files/productManager.json', 'utf-8')
         const contentParse = JSON.parse(content)
         let productFound = "Id Product Not Found."
 
@@ -59,12 +74,13 @@ class ProductManager {
                 productFound = element
             }
         });
-
+        console.log("GET/ getProductById:", id)
+        console.log(productFound)
         return productFound
     }
 
     async getProductByCode(code) {
-        const content = await fs.promises.readFile('productManager.json', 'utf-8')
+        const content = await fs.promises.readFile('./src/files/productManager.json', 'utf-8')
         const contentParse = JSON.parse(content)
         let productFound = "Code Product Not Found."
 
@@ -73,6 +89,8 @@ class ProductManager {
                 productFound = element
             }
         });
+        console.log("GET/ getProductByCode:", code)
+        console.log(productFound)
 
         return productFound
     }
@@ -129,3 +147,5 @@ class ProductManager {
         console.log("File succesfully deleted.")
     }
 }
+
+export { ProductManager }
