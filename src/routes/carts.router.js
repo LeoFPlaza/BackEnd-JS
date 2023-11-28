@@ -17,6 +17,7 @@ router.get('/:cid', async  (req, res)=>{
         res.json(cart)
 })
 
+//lo puse en un metodo put porque me parecio que si estoy agregando productos a un arreglo dentro del carrito existente es mas un update que un insert
 router.put('/:cid/:pid', async  (req, res)=>{
     const {cid, pid} =req.params
     const cart = await cartManager.addProductToCart(parseInt(cid), parseInt(pid))

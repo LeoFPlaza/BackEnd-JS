@@ -41,26 +41,27 @@ class CartManager {
     async addProductToCart(cid, pid) {
         const carts = await this.loadCart()
         const cartIndex = carts.findIndex(cart => cart.id === cid)
-        const cartProds = carts[cartIndex].products
-        const ProductExists = cartProds.some((product) => product.productId === pid);
-        console.log(cartProds[0].productId)
 
         if (cartIndex === -1) {
             return "Carrito no encontrado"
         }
+
+        const cartProds = carts[cartIndex].products
+        const ProductExists = cartProds.some((product) => product.productId === pid);
+
         if(!ProductExists){
         carts[cartIndex].products = cartProds.concat([{productId: pid, quantity: 1}])
         const res = await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2))
-        return res
+        return "Producto agregado correctamente"
         }else{
             const productIndex = cartProds.findIndex((product) => product.productId === pid);
-            console.log(cartProds[productIndex].quantity)
             const oneMoreProd = {
+                ...carts[cartIndex],
                 ...cartProds[productIndex].quantity++,
             };
-            carts[productIndex] = oneMoreProd;
+            carts[cartIndex] = oneMoreProd;
             const res = await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2))
-            return res
+            return "Un item extra agregado"
         }
     }
 }

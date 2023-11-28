@@ -19,12 +19,12 @@
   },
   {
     "id": 24,
-    "title": "Bread Roll Foccacia",
-    "description": "In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.",
+    "title": "new product",
+    "description": "new product updated from API route",
     "code": "MOCl9Wg",
     "price": 7395.28,
     "thumbnail": "http://dummyimage.com/135x100.png/cc0000/ffffff",
-    "stock": 80
+    "stock": 260
   },
   {
     "id": 26,
