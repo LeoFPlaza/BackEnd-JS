@@ -1,1 +1,1 @@
-console.log('prod')
+socket.emit('getMsg', 'Mensaje enviado del lado del cliente')
