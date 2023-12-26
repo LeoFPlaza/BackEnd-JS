@@ -1,5 +1,5 @@
-import {Router} from 'express'
-import { ProductManager } from '../classes/ProductManager.js'
+import { Router } from 'express'
+import { ProductManager } from '../../classes/ProductManager.js'
 import bodyParser from "body-parser"
 
 const router = Router()
