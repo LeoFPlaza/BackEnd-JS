@@ -1,11 +1,13 @@
 import express from 'express'
+import handlebars from 'express-handlebars'
 import bodyParser from "body-parser"
+import { Server } from 'socket.io';
+import path from 'path';
 import productManagerRouter from './routes/apis/products.router.js'
 import cartsRouter from "./routes/apis/carts.router.js";
 import viewsRouter from "./routes/views.routes.js";
-import path from 'path';
 import { fileURLToPath } from 'url';
-import handlebars from 'express-handlebars'
+import { Socket } from 'dgram';
 
 
 const __filename = fileURLToPath(import.meta.url)
@@ -20,7 +22,6 @@ app.engine('hbs', handlebars.engine({
 }))
 app.set('view engine', '.hbs')
 app.set('views', __dirname + '/views')
-
 
 app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -38,8 +39,18 @@ app.use((err, req, res, next) => {
 })
 
 
-app.listen(port, () => {
+const httpServer = app.listen(port,err => {
+    if(err) console.log(err)
     console.log(`Server is listening on port ${port}`)
 })
 
+const socketServer = new Server(httpServer)
+socketServer.on('connection', socket => {
+    console.log('SocketSever is connected and listening')
 
+    socket.on('getMsg', data =>{
+        console.log(data)
+    })
+
+    
+})
