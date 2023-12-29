@@ -3,17 +3,23 @@ import handlebars from 'express-handlebars'
 import bodyParser from "body-parser"
 import { Server } from 'socket.io';
 import path from 'path';
-import productManagerRouter from './routes/apis/products.router.js'
-import cartsRouter from "./routes/apis/carts.router.js";
-import viewsRouter from "./routes/views.routes.js";
 import { fileURLToPath } from 'url';
+import mongoose, { connect } from 'mongoose';
+import appRouter from './routes/index.js'
 
 
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 const app = express()
 const port = 8080
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const connectDB = async () => {
+    await connect('mongodb+srv://leoplaz:KiyKitB61WImX4QO@cluster0.p0fcrnj.mongodb.net/eCommerce?retryWrites=true&w=majority')
+    console.log("conexión establecida a la base de datos")
+}
+
+connectDB()
+
 
 const httpServer = app.listen(port, err => {
     if (err) console.log(err)
@@ -40,9 +46,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'))
-app.use('/', viewsRouter)
-app.use('/api/products', productManagerRouter)
-app.use('/api/carts', cartsRouter)
+app.use(appRouter)
+
 // app.use('/static',express.static(__dirname + '/public'))
 
 app.use((err, req, res, next) => {

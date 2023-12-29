@@ -47,9 +47,9 @@ class CartManager {
         }
 
         const cartProds = carts[cartIndex].products
-        const ProductExists = cartProds.some((product) => product.productId === pid);
+        const productExists = cartProds.some((product) => product.productId === pid);
 
-        if(!ProductExists){
+        if(!productExists){
         carts[cartIndex].products = cartProds.concat([{productId: pid, quantity: 1}])
         const res = await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2))
         return "Producto agregado correctamente"

@@ -88,7 +88,7 @@ class ProductManager {
     }
 
 
-    async addProduct(title, description, code, price, thumbnail, stock,status,category) {
+    async addProduct(title, description, code, price, thumbnail, stock, status, category) {
         //como el campo status es obligatorio agrego el operador ternario aqui para que siempre que no sea deliveradamente false el valor para esa llave sea true
         status = status !== false ? true : status
         const content = await fs.promises.readFile(path, 'utf-8')
